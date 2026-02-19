@@ -9,7 +9,10 @@ import "dotenv/config";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+    origin: "https/localhost:5000", // it is replace with frontend URL,
+    credentials: true, // this is mandatory for cookies to work 
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
