@@ -9,7 +9,7 @@ const generateToken = (id) => {
   });
 };
 
-const setTokenCookie = (req, token) => {
+const setTokenCookie = (res, token) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // https is only in production blocked when development phase
@@ -52,7 +52,7 @@ export const registerUser = async (req, res) => {
       // });
 
       res.status(201).json({
-        message: "User registered successfully",
+        message: `User registered successfully ${user.name}`,
         user: {
           id: user._id,
           name: user.name,
