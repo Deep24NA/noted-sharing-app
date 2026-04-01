@@ -1,67 +1,68 @@
-import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import React, { useState } from 'react';
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'; // You'll need to install react-icons
+import { Link } from 'react-router-dom';
 
+const navItems = [
+  { id: 1, text: 'Home', href: '/' },
+  { id: 2, text: 'About', href: '/about' },
+  { id: 3, text:'Contact', href: '/contact' },
+  { id: 4, text: 'Register/Login', href: '/register' },
+];
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [dropdown, setDropdown] = useState(false);
+const Navbar = () => {
+  // State to manage the visibility of the mobile menu
+  const [nav, setNav] = useState(false);
+
+  // Function to toggle the mobile menu state
+  const handleNav = () => {
+    setNav(!nav);
+  };
 
   return (
-    <nav className="bg-gray-900 text-white shadow-md relative">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          
-          {/* Logo */}
-          <h1 className="text-2xl font-bold">MyApp</h1>
+    <div className='bg-gray-800 text-white flex justify-between items-center h-20 mx-auto px-4 sticky top-0 z-40 shadow-sm shadow-cyan-800 w-full'  >
+      {/* Logo/Brand Name */}
+      <h1 className='text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 via-pink-900 via-purple-500 to-indigo-500 bg-clip-text text-transparent  '>NoteHub</h1>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6 items-center">
-            <a href="#" className="hover:text-yellow-400">Home</a>
-            <a href="#" className="hover:text-yellow-400">About</a>
-            <a href="#" className="hover:text-yellow-400">Contact</a>
-          </div>
+      {/* Desktop Navigation (Visible on medium screens and larger) */}
+      <ul className='hidden md:flex'>
+        {navItems.map(item => (
+          <li
+            key={item.id}
+            className=''
+          >
+            {/* <a href={item.href}>{item.text}</a> */}
+            <Link to={item.href} className='p-4 hover:bg-indigo-600 rounded-xl m-2 cursor-pointer duration-300'>{item.text}</Link>
+          </li>
+        ))}
+      </ul>
 
-          {/* Mobile Toggle Button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
-        </div>
+      {/* Mobile Menu Icon (Visible only on small screens) */}
+      <div onClick={handleNav} className='block md:hidden cursor-pointer z-20'>
+        {nav ? <AiOutlineClose size={25} /> : <AiOutlineMenu size={25} />}
       </div>
 
-      {/* ✅ Mobile Overlay Menu */}
-      {isOpen && (
-        <div className="absolute top-16 right-0 w-fit bg-transparent shadow-lg md:hidden">
-          <div className="px-4 py-4 space-y-2 text-black">
-            <a href="#" className="block hover:text-blue-400 ">Home</a>
-            <a href="#" className="block hover:text-blue-400">About</a>
-
-            {/* Dropdown */}
-            <div>
-              <button
-                onClick={() => setDropdown(!dropdown)}
-                className="flex justify-between w-full hover:text-yellow-400"
-              >
-                Services <ChevronDown size={16} />
-              </button>
-
-              {dropdown && (
-                <div className="ml-4 mt-2 space-y-1">
-                  <a href="#" className="block hover:text-yellow-400">
-                    Web Dev
-                  </a>
-                  <a href="#" className="block hover:text-yellow-400">
-                    App Dev
-                  </a>
-                </div>
-              )}
-            </div>
-
-            <a href="#" className="block hover:text-yellow-400">Contact</a>
-          </div>
-        </div>
-      )}
-    </nav>
+      {/* Mobile Navigation Menu (Sliding sidebar for small screens) */}
+      <ul
+        className={
+          // Conditional class for open/close animation and positioning
+          nav
+            ? 'fixed md:hidden left-0 top-0 w-[60%]  border-r border-r-gray-900 bg-gray-800 ease-in-out duration-500 z-20'
+            : 'ease-in-out duration-500 fixed left-[-100%]'
+        }
+      >
+        {/* <h1 className='text-3xl font-bold text-indigo-400 m-4 mt-7'>REACT.</h1> */}
+        {navItems.map(item => (
+          <li
+            key={item.id}
+            className='p-4 border-b rounded-xl hover:bg-indigo-600 duration-300 border-gray-600 cursor-pointer'
+          >
+         <Link to={item.href} onClick={handleNav}>{item.text}</Link>
+           
+          </li>
+        ))}
+      </ul>
+    </div>
   );
-}
+};
+
+export default Navbar;
